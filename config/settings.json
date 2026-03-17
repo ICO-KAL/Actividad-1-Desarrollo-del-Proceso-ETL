@@ -1,0 +1,55 @@
+{
+  "worker": {
+    "log_level": "INFO",
+    "max_parallel_extractors": 3,
+    "temp_output_dir": "staging/temp"
+  },
+  "database": {
+    "server": "LAPTOP-L44SRLPQ\\SQLEXPRESS", // Cambia esto por tu servidor SQL Server
+    "database": "ProcesoETLDB",
+    "driver": "ODBC Driver 17 for SQL Server",
+    "trusted_connection": true,
+    "encrypt": true,
+    "trust_server_certificate": true,
+    "username_env": "ETL_DB_USER", // Variable de entorno para el usuario de la base de datos
+    "password_env": "ETL_DB_PASSWORD" // Variable de entorno para la contraseña de la base de datos
+  },
+  "sources": {
+    "csv": {
+      "enabled": true,
+      "directory": "csv",
+      "files": [
+        "customers.csv",
+        "products.csv",
+        "orders.csv",
+        "order_details.csv"
+      ]
+    },
+    "database": {
+      "enabled": true,
+      "queries": [
+        {
+          "name": "orders_overview",
+          "sql": "SELECT o.OrderID, o.CustomerID, o.OrderDate, o.Status, SUM(od.TotalPrice) AS OrderTotal FROM dbo.Orders o LEFT JOIN dbo.OrderDetails od ON o.OrderID = od.OrderID GROUP BY o.OrderID, o.CustomerID, o.OrderDate, o.Status"
+        },
+        {
+          "name": "customer_activity",
+          "sql": "SELECT c.CustomerID, c.FirstName, c.LastName, COUNT(o.OrderID) AS OrdersCount FROM dbo.Customers c LEFT JOIN dbo.Orders o ON c.CustomerID = o.CustomerID GROUP BY c.CustomerID, c.FirstName, c.LastName"
+        }
+      ]
+    },
+    "api": {
+      "enabled": true,
+      "base_url": "https://jsonplaceholder.typicode.com",
+      "endpoint": "/comments",
+      "timeout_seconds": 30,
+      "api_key_env": "ETL_API_KEY"
+    }
+  },
+  "staging": {
+    "save_temp_files": true,
+    "load_to_tables": true,
+    "clear_before_load": true,
+    "strict_mode": false
+  }
+}
