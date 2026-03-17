@@ -59,8 +59,13 @@ Orquesta la ejecución del proceso ETL y ejecuta los extractores en paralelo.
 ---
 # Instalacion y Ejecucion
 instalacion:
+
 pip install -r requirements.txt
+
+
 Arranque del projecto:
+
+
 python Proceso.py
 
 # Base de Datos Analítica
