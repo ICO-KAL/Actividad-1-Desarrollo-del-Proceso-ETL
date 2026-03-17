@@ -57,7 +57,7 @@ Registra logs, errores y métricas del proceso ETL.
 Orquesta la ejecución del proceso ETL y ejecuta los extractores en paralelo.
 
 ---
-# Instalacion y Ejecusion
+# Instalacion y Ejecucion
 pip install -r requirements.txt
 python Proceso.py
 
